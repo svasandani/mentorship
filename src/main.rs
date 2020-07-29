@@ -21,7 +21,7 @@ fn main() -> io::Result<()> {
     // panic for invalid syntax
     // TODO - fail gracefully
     let num_people: usize = num_people_string.trim().parse().unwrap();
-    println!("{}", num_people);
+    println!("For {} people in each group,", num_people);
 
     // read group A prefs
 
@@ -29,6 +29,9 @@ fn main() -> io::Result<()> {
 
     // store prefs in a 2d Vec
     let mut group_a_preferences: Vec<usize> = Vec::with_capacity(num_people * num_people);
+
+    println!("Group A's prefernces");
+    println!("{:<7} | {:<15}", "Person", "Preferences");
 
     let mut a = 0;
     // for each person in group A
@@ -39,15 +42,16 @@ fn main() -> io::Result<()> {
 
         let prefs = prefs_string.split(" ");
 
+        print!("{:<7} |", a);
+
         // record their preferences for people in group B
         for p in prefs {
-            group_a_preferences.push(p.trim().parse().unwrap())
+            group_a_preferences.push(p.trim().parse().unwrap());
+            print!(" {}", p);
         }
 
         a = a + 1;
     }
-
-    println!("{:?}", group_a_preferences);
 
     // repeat the above for group B
 
@@ -55,6 +59,10 @@ fn main() -> io::Result<()> {
 
     // store prefs in a 2d Vec
     let mut group_b_preferences: Vec<usize> = Vec::with_capacity(num_people * num_people);
+
+    println!("");
+    println!("Group B's prefernces");
+    println!("{:<7} | {:<15}", "Person", "Preferences");
 
     let mut b = 0;
     // for each person in group B
@@ -65,17 +73,30 @@ fn main() -> io::Result<()> {
 
         let prefs = prefs_string.split(" ");
 
+        print!("{:<7} |", b);
+
         // record their preferences for people in group A
         for p in prefs {
-            group_b_preferences.push(p.trim().parse().unwrap())
+            group_b_preferences.push(p.trim().parse().unwrap());
+            print!(" {}", p);
         }
 
         b = b + 1;
     }
 
-    println!("{:?}", group_b_preferences);
+    let matches = stable_match(num_people, group_a_preferences, group_b_preferences);
 
-    println!("{:?}", stable_match(num_people, group_a_preferences, group_b_preferences));
+    println!("");
+    println!("Stable matches:");
+    println!("{:^7} | {:^7}", "Group A", "Group B");
+    println!("------- | -------");
+
+    // pretty print matches
+    let mut i = 0;
+    while i < num_people {
+        println!("{:^7} | {:^7}", i, matches[i]);
+        i = i + 1;
+    }
 
     Ok(())
 }
@@ -92,7 +113,7 @@ fn stable_match(num_people: usize, group_a_preferences: Vec<usize>, group_b_pref
     let mut round = 0;
 
     // while there are unmatched members in group A
-    while (provisional_matches.contains(&max)) {
+    while provisional_matches.contains(&max) {
         // each member of group A proposes a match to its most preferred
         let mut a = 0;
         // for each person in group A
@@ -111,10 +132,10 @@ fn stable_match(num_people: usize, group_a_preferences: Vec<usize>, group_b_pref
                 // otherwise
                 // we see if A is better than B's current best offer
                 let mut better: bool = false;
-                let mut i = a_best_match * num_people;
+                let i = a_best_match * num_people;
 
                 // for each of B's preferences
-                while i <  (a_best_match + 1) * num_people {
+                while i < (a_best_match + 1) * num_people {
                     // if we reach A first, then A is better
                     if group_b_preferences[i] == a {
                         better = true;
