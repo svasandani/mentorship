@@ -132,7 +132,7 @@ fn stable_match(num_people: usize, group_a_preferences: Vec<usize>, group_b_pref
                 // otherwise
                 // we see if A is better than B's current best offer
                 let mut better: bool = false;
-                let i = a_best_match * num_people;
+                let mut i = a_best_match * num_people;
 
                 // for each of B's preferences
                 while i < (a_best_match + 1) * num_people {
@@ -144,7 +144,11 @@ fn stable_match(num_people: usize, group_a_preferences: Vec<usize>, group_b_pref
                         // but if we reach the current match, then A is not better
                         better = false;
                         break;
+                    } else if i == (a_best_match + 1) * num_people - 1 {
+                        println!("Something went wrong!");
                     }
+
+                    i = i + 1;
                 }
 
                 // if A is better 
