@@ -22,6 +22,7 @@ fn main() -> io::Result<()> {
     // TODO - fail gracefully
     let num_people: usize = num_people_string.trim().parse().unwrap();
     println!("For {} people in each group,", num_people);
+    println!("");
 
     // read group A prefs
 
@@ -30,7 +31,7 @@ fn main() -> io::Result<()> {
     // store prefs in a 2d Vec
     let mut group_a_preferences: Vec<usize> = Vec::with_capacity(num_people * num_people);
 
-    println!("Group A's prefernces");
+    println!("Group A's preferences");
     println!("{:<7} | {:<15}", "Person", "Preferences");
 
     let mut a = 0;
@@ -47,8 +48,10 @@ fn main() -> io::Result<()> {
         // record their preferences for people in group B
         for p in prefs {
             group_a_preferences.push(p.trim().parse().unwrap());
-            print!(" {}", p);
+            print!(" {}", p.trim());
         }
+
+        println!("");
 
         a = a + 1;
     }
@@ -61,7 +64,8 @@ fn main() -> io::Result<()> {
     let mut group_b_preferences: Vec<usize> = Vec::with_capacity(num_people * num_people);
 
     println!("");
-    println!("Group B's prefernces");
+    println!("");
+    println!("Group B's preferences");
     println!("{:<7} | {:<15}", "Person", "Preferences");
 
     let mut b = 0;
@@ -78,14 +82,17 @@ fn main() -> io::Result<()> {
         // record their preferences for people in group A
         for p in prefs {
             group_b_preferences.push(p.trim().parse().unwrap());
-            print!(" {}", p);
+            print!(" {}", p.trim());
         }
+
+        println!("");
 
         b = b + 1;
     }
 
     let matches = stable_match(num_people, group_a_preferences, group_b_preferences);
-
+    
+    println!("");
     println!("");
     println!("Stable matches:");
     println!("{:^7} | {:^7}", "Group A", "Group B");
